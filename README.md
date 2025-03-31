@@ -287,7 +287,8 @@ def logout(request):
 {% if user.is_authenticated %}
 ```
 
-## 17. Create 수정
+# Posts
+## 17. Post - Create/ Read Update
 - PostForm `posts/forms.py`
 - 함수
 ```python
@@ -309,6 +310,23 @@ def create(request):
 <!-- posts/templates/_card.html -->
 <img class="rounded-circle" src="{{post.user.profile_image.url}}" alt="">
 <a href="">{{post.user.username}}</a>
+```
+
+## 18. 시간 설정/ 이모지 설정
+- 시간 설정
+    - django가 가진 함수 사용
+```html
+<!-- posts/templates/_card.html -->
+<p class="card-text">{{post.created_at|timesince}} ago</p>
+```
+- 이모지 설정
+    - `../templates/base.html`에 CDN 추가
+```html
+<!-- _nav.html -->
+<a class="navbar-brand" href="{% url 'posts:index' %}">
+    <i class="bi bi-instagram"></i>
+    Insta⭐
+</a>
 ```
 
 ---
