@@ -3,7 +3,8 @@
 - 프로젝트 이름: 서비스 이름
 - 모델 이름: 앱 이름
 
-## 0. Setting
+# Setting
+## 0. .gitignore
 - 가상환경 생성/ 활성화
 - django 설치
 - .gitignore
@@ -48,4 +49,17 @@ image/
 ## 6. requirements.txt 추가
 ```shell
 pip freeze >> requirements.txt
+```
+
+# Posts
+## 7. Post - Read
+- 경로 설정
+- 함수 생성
+- 페이지 생성
+```html
+<!-- posts/templates/index.html -->
+{% for post in posts %}
+    <p>{{post.content}}</p>
+    <p>{{post.image}}</p>
+{% endfor %}
 ```
