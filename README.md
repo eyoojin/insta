@@ -287,6 +287,30 @@ def logout(request):
 {% if user.is_authenticated %}
 ```
 
+## 17. Create 수정
+- PostForm `posts/forms.py`
+- 함수
+```python
+# posts/views.py
+post = form.save(commit=False)
+post.user = request.user
+post.save()
+```
+- login_required
+```python
+# posts/views.py
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def create(request):
+```
+- html 수정
+```html
+<!-- posts/templates/_card.html -->
+<img class="rounded-circle" src="{{post.user.profile_image.url}}" alt="">
+<a href="">{{post.user.username}}</a>
+```
+
 ---
 ### commit message 수정
 ```shell
