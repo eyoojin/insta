@@ -82,7 +82,8 @@ pip freeze >> requirements.txt
     <p>{{post.image.url}}</p>
 {% endfor %}
 ```
-## 9. Post - Read 기능 업데이트
+
+## 8. Post - Read 기능 업데이트
 - 이미지 확인
 ```html
 <!-- posts/templates/index.html -->
@@ -113,11 +114,11 @@ pip freeze >> requirements.txt
 </div>
 ```
 
-## 10. navbar
+## 9. navbar
 - navbar
     - `../templates/_nav.html` 생성
 
-## 11. Post - Create
+## 10. Post - Create
 - 버튼 생성 `../templates/_nav.html`
 - 경로 설정 `posts/urls.py`
 - Form
@@ -146,7 +147,7 @@ def create(request):
             form.save()
             return redirect('posts:index')
 ```
-- bootstrap
+- bootstrap 적용
 ```shell
 pip install django-bootstrap5
 ```
@@ -161,3 +162,22 @@ INSTALLED_APPS = ['django_bootstrap5']
 {% bootstrap_form form %}
 <input type="submit" class="btn btn-primary">
 ```
+
+## 11. image resize
+```shell
+pip install django-resized
+```
+```python
+# models.py
+from django_resized import ResizedImageField
+
+# image = models.ImageField(upload_to='image')
+
+image = ResizedImageField(
+    size=[500, 500],
+    crop=['middle', 'center'],
+    upload_to='image/%Y/%m', # 년도와 월을 기준으로 폴더를 만듦
+)
+```
+- 사진 폴더/ DB 초기화
+- requirements update
