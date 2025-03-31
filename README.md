@@ -238,6 +238,37 @@ class CustomUserCreationForm(UserCreationForm):
     - `create.html`과 동일
 - 함수 생성(POST 요청) `accounts/views.py`
 
+## 15. Login - Create 
+- 경로 설정 `accounts/urls.py`
+- form
+```python
+# accounts/forms.py
+from django.contrib.auth.forms import AuthenticationForm
+
+class CustomAuthenticationForm(AuthenticationForm):
+    pass
+```
+- 함수 생성(GET 요청) `accounts/views.py`
+- 페이지 생성 `accounts/templates/login.html`
+    - `enctype` 빼고 `signup.html`과 동일
+- 함수 생성(POST 요청)
+```python
+# accounts/views.py
+from django.contrib.auth import login as auth_login
+
+def login(request):
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, request.POST)
+        if form.is_valid():
+
+            # user 정보 가져오기
+            user = form.get_user()
+
+            # login 처리 -> session 만들기
+            auth_login(request, user)
+
+            return redirect('posts:index')
+```
 
 
 ---
