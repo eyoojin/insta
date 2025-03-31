@@ -11,5 +11,18 @@
 ## 1. startproject/ startapp
 - 앱 등록
 
-## 2. base.html
+## 2. base.html 기본 구조
 - templates 등록
+
+## 3. Post modeling/ migration
+- ImageField
+```python
+image = models.ImageField(upload_to='image')
+# 필수 옵션 'upload_to': 이미지가 저장되는 공간
+```
+- makemigrations
+- error
+```shell
+pip install pillow
+```
+- migrate
