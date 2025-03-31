@@ -18,7 +18,7 @@
 - modeling
     - ImageField
 ```python
-# models.py
+# posts/models.py
 image = models.ImageField(upload_to='image')
 # 필수 옵션 'upload_to': 이미지가 저장되는 공간
 ```
@@ -31,16 +31,21 @@ pip install pillow
 
 ## 4. admin에 Post 모델 등록
 ```python
-# admin.py
+# posts/admin.py
 from .models import Post
 
 admin.site.register(Post)
 ```
 
-## 5.
+## 5. .gitignore에 image 폴더 추가
 - createsuperuser 생성
 - admin 페이지 확인
 - image 폴더 .gitignore 설정
 ```git
 image/
+```
+
+## 6. requirements.txt 추가
+```shell
+pip freeze >> requirements.txt
 ```
