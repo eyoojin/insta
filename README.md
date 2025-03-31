@@ -63,3 +63,23 @@ pip freeze >> requirements.txt
     <p>{{post.image}}</p>
 {% endfor %}
 ```
+
+## 8. media 설정
+```python
+# settings.py
+MEDIA_ROOT = BASE_DIR / 'image'
+# 업로드한 사진을 저장한 위치(실제 폴더 경로)
+
+MEDIA_URL = '/image/'
+# 미디어 경로를 처리할 URL
+```
+```python
+# insta/urls.py
+from django.conf.urls.static import static
+from django.conf import settings
+
+urlpatterns = [] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# + concatenation
+# (사용자에게 보여주는 경로, 실제로 가야할 경로)
+```
+- 사용자에게 이미지 보여줄 준비 완료
