@@ -18,6 +18,7 @@
 - modeling
     - ImageField
 ```python
+# models.py
 image = models.ImageField(upload_to='image')
 # 필수 옵션 'upload_to': 이미지가 저장되는 공간
 ```
@@ -34,4 +35,12 @@ pip install pillow
 from .models import Post
 
 admin.site.register(Post)
+```
+
+## 5.
+- createsuperuser 생성
+- admin 페이지 확인
+- image 폴더 .gitignore 설정
+```git
+image/
 ```
