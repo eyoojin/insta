@@ -23,6 +23,24 @@
 image = models.ImageField(upload_to='image')
 # 필수 옵션 'upload_to': 이미지가 저장되는 공간
 ```
+- setting
+```python
+# settings.py
+MEDIA_ROOT = BASE_DIR / 'media'
+# 업로드한 사진을 저장한 위치(실제 폴더 경로)
+
+MEDIA_URL = '/media/'
+# 미디어 경로를 처리할 URL
+```
+```python
+# insta/urls.py
+from django.conf.urls.static import static
+from django.conf import settings
+
+urlpatterns = [] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# + concatenation
+# (사용자에게 보여주는 경로, 실제로 가야할 경로)
+```
 - makemigrations
     - error
 ```shell
@@ -43,7 +61,7 @@ admin.site.register(Post)
 - admin 페이지 확인
 - image 폴더 .gitignore 설정
 ```git
-image/
+media/
 ```
 
 ## 6. requirements.txt 추가
@@ -65,40 +83,26 @@ pip freeze >> requirements.txt
 ```
 
 ## 8. media 설정
-```python
-# settings.py
-MEDIA_ROOT = BASE_DIR / 'media'
-# 업로드한 사진을 저장한 위치(실제 폴더 경로)
 
-MEDIA_URL = '/media/'
-# 미디어 경로를 처리할 URL
-```
-```python
-# insta/urls.py
-from django.conf.urls.static import static
-from django.conf import settings
-
-urlpatterns = [] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# + concatenation
-# (사용자에게 보여주는 경로, 실제로 가야할 경로)
-```
 - 사용자에게 이미지 보여줄 준비 완료
 
-## 9. Read 기능 업데이트
+## 9. Post - Read 기능 업데이트
 - 이미지 확인
 ```html
 <!-- posts/index.html -->
 <img src="{{post.image.url}}" alt="">
 ```
-- `templates/_card.html`에 card css 복사
+- bootstrap 편하게 사용하기
+    - `templates/_card.html`에 card css 복사
 ```html
 <!-- posts/index.html -->
 {% for post in posts %}
-        {% include '_card.html' %}
+    {% include '_card.html' %}
 {% endfor %}
 ```
 ```html
 <!-- posts/_card.html -->
+<!-- 이 안은 for문 안쪽임 -->
 <div class="card my-3" style="width: 18rem;">
     <div class="card-header">
         <p>username</p>
@@ -112,3 +116,7 @@ urlpatterns = [] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     </div>
 </div>
 ```
+
+## 10. Create
+- navbar
+    - `templates/_nav.html` 생성
