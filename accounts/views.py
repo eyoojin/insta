@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
 # Create your views here.
 def signup(request):
@@ -26,7 +27,7 @@ def login(request):
             # user 정보 가져오기
             user = form.get_user()
 
-            # login 처리 -> session 만들기
+            # login 처리 -> session 발급
             auth_login(request, user)
 
             return redirect('posts:index')
@@ -38,3 +39,7 @@ def login(request):
     }
 
     return render(request, 'login.html', context)
+
+def logout(request):
+    auth_logout(request)
+    return redirect('posts:index')

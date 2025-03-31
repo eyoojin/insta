@@ -264,12 +264,28 @@ def login(request):
             # user 정보 가져오기
             user = form.get_user()
 
-            # login 처리 -> session 만들기
+            # login 처리 -> session 발급
             auth_login(request, user)
 
             return redirect('posts:index')
 ```
 
+## 16. Logout - Delete
+- 경로 설정 `accounts/urls.py`
+- 함수 생성 
+```python
+# accounts/views.py
+from django.contrib.auth import logout as auth_logout
+
+def logout(request):
+    auth_logout(request)
+    return redirect('posts:index')
+```
+- 버튼 생성 + navbar 수정(if)
+```html
+<!-- ../templates/_nav.html -->
+{% if user.is_authenticated %}
+```
 
 ---
 ### commit message 수정
