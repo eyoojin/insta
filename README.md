@@ -220,3 +220,31 @@ user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
         - 2. model 수정 or DB 날리기
 - 다시 migration
 
+## 14. Signup - Create
+- 경로 설정 `insta/urls.py` -> `accounts/urls.py`
+- form
+```python
+# accounts/forms.py
+from django.contrib.auth.forms import UserCreationForm
+from .models import User
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta():
+        model = User
+        fields = ('username', 'profile_image', )
+```
+- 함수 생성(GET 요청) `accounts/views.py`
+- 페이지 생성 `accounts/templates/signup.html`
+    - `create.html`과 동일
+- 함수 생성(POST 요청) `accounts/views.py`
+
+
+
+---
+### commit message 수정
+```shell
+git commit --amend
+```
+- i: insert mode 설정 -> 수정
+- esc: inset mode 해제
+- :wq
