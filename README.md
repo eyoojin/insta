@@ -71,7 +71,7 @@ pip freeze >> requirements.txt
 
 # Posts
 ## 7. Post - Read
-- 경로 설정
+- 경로 설정 `insta/urls.py` -> `posts/urls.py`
 - 함수 생성 `posts/views.py`
 - 페이지 생성
 ```html
@@ -106,10 +106,8 @@ pip freeze >> requirements.txt
     </div>
     <img src="{{post.image.url}}" class="" alt="...">
     <div class="card-body">
-      <!-- <h5 class="card-title">Card title</h5> -->
-      <p class="card-text">{{post.content}}</p>
-      <p class="card-text">{{post.created_at}}</p>
-      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+        <p class="card-text">{{post.content}}</p>
+        <p class="card-text">{{post.created_at}}</p>
     </div>
 </div>
 ```
@@ -152,11 +150,11 @@ def create(request):
 pip install django-bootstrap5
 ```
 ```python
-# settings.py
+# insta/settings.py
 INSTALLED_APPS = ['django_bootstrap5']
 ```
 ```html
-<!-- create.html -->
+<!-- posts/templates/create.html -->
 {% load django_bootstrap5 %}
 
 {% bootstrap_form form %}
@@ -168,7 +166,7 @@ INSTALLED_APPS = ['django_bootstrap5']
 pip install django-resized
 ```
 ```python
-# models.py
+# posts/models.py
 from django_resized import ResizedImageField
 
 # image = models.ImageField(upload_to='image')
@@ -184,6 +182,41 @@ image = ResizedImageField(
 ```shell
 pip freeze > requirements.txt
 ```
-    - ``
+- `>>`: 현재 파일에 추가
+- `>`: 현재 파일에 덮어쓰기
 
 # Acoounts
+## 12. startapp
+- 앱 등록
+
+## 13. User modeling/ migration
+```python
+# accounts/models.py
+from django.contrib.auth.models import AbstractUser
+from django_resized import ResizedImageField
+
+# Create your models here.
+class User(AbstractUser):
+    profile_image = ResizedImageField(
+        size=[500, 500],
+        crop=['middle', 'center'],
+        upload_to='profile',
+    )
+```
+```python
+# insta/settings.py
+AUTH_USER_MODEL = 'accounts.User'
+```
+```python
+# posts/models.py
+from django.conf import settings
+
+# User와 Post 1:N 연결
+user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+```
+- migration
+    - error
+        - 1. default 값 설정
+        - 2. model 수정 or DB 날리기
+- 다시 migration
+
