@@ -10,3 +10,6 @@
 
 ## 1. startproject/ startapp
 - 앱 등록
+
+## 2. base.html
+- templates 등록
