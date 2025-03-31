@@ -8,3 +8,5 @@
 - django 설치
 - .gitignore
 
+## 1. startproject/ startapp
+- 앱 등록
