@@ -72,36 +72,32 @@ pip freeze >> requirements.txt
 # Posts
 ## 7. Post - Read
 - 경로 설정
-- 함수 생성
+- 함수 생성 `posts/views.py`
 - 페이지 생성
 ```html
 <!-- posts/templates/index.html -->
 {% for post in posts %}
     <p>{{post.content}}</p>
     <p>{{post.image}}</p>
+    <p>{{post.image.url}}</p>
 {% endfor %}
 ```
-
-## 8. media 설정
-
-- 사용자에게 이미지 보여줄 준비 완료
-
 ## 9. Post - Read 기능 업데이트
 - 이미지 확인
 ```html
-<!-- posts/index.html -->
+<!-- posts/templates/index.html -->
 <img src="{{post.image.url}}" alt="">
 ```
 - bootstrap 편하게 사용하기
-    - `templates/_card.html`에 card css 복사
+    - `posts/templates/_card.html`에 card css 복사
 ```html
-<!-- posts/index.html -->
+<!-- posts/templates/index.html -->
 {% for post in posts %}
     {% include '_card.html' %}
 {% endfor %}
 ```
 ```html
-<!-- posts/_card.html -->
+<!-- posts/templates/_card.html -->
 <!-- 이 안은 for문 안쪽임 -->
 <div class="card my-3" style="width: 18rem;">
     <div class="card-header">
@@ -117,6 +113,51 @@ pip freeze >> requirements.txt
 </div>
 ```
 
-## 10. Create
+## 10. navbar
 - navbar
-    - `templates/_nav.html` 생성
+    - `../templates/_nav.html` 생성
+
+## 11. Post - Create
+- 버튼 생성 `../templates/_nav.html`
+- 경로 설정 `posts/urls.py`
+- Form
+```python
+# posts/forms.py
+from django.forms import ModelForm
+```
+- 함수 생성(GET 요청) `posts/views.py`
+- 페이지 생성
+```html
+<!-- posts/templates/create.html -->
+<!-- 사진을 가져오려면 인코딩타입 변경 -->
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit">
+</form>
+```
+- 함수 생성(POST 요청)
+```python
+# posts/views.py
+def create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('posts:index')
+```
+- bootstrap
+```shell
+pip install django-bootstrap5
+```
+```python
+# settings.py
+INSTALLED_APPS = ['django_bootstrap5']
+```
+```html
+<!-- create.html -->
+{% load django_bootstrap5 %}
+
+{% bootstrap_form form %}
+<input type="submit" class="btn btn-primary">
+```
