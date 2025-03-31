@@ -163,7 +163,7 @@ INSTALLED_APPS = ['django_bootstrap5']
 <input type="submit" class="btn btn-primary">
 ```
 
-## 11. image resize
+## 11. image resize 기능 추가
 ```shell
 pip install django-resized
 ```
@@ -181,3 +181,9 @@ image = ResizedImageField(
 ```
 - 사진 폴더/ DB 초기화
 - requirements update
+```shell
+pip freeze > requirements.txt
+```
+    - ``
+
+# Acoounts
