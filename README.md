@@ -67,10 +67,10 @@ pip freeze >> requirements.txt
 ## 8. media 설정
 ```python
 # settings.py
-MEDIA_ROOT = BASE_DIR / 'image'
+MEDIA_ROOT = BASE_DIR / 'media'
 # 업로드한 사진을 저장한 위치(실제 폴더 경로)
 
-MEDIA_URL = '/image/'
+MEDIA_URL = '/media/'
 # 미디어 경로를 처리할 URL
 ```
 ```python
@@ -83,3 +83,32 @@ urlpatterns = [] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # (사용자에게 보여주는 경로, 실제로 가야할 경로)
 ```
 - 사용자에게 이미지 보여줄 준비 완료
+
+## 9. Read 기능 업데이트
+- 이미지 확인
+```html
+<!-- posts/index.html -->
+<img src="{{post.image.url}}" alt="">
+```
+- `templates/_card.html`에 card css 복사
+```html
+<!-- posts/index.html -->
+{% for post in posts %}
+        {% include '_card.html' %}
+{% endfor %}
+```
+```html
+<!-- posts/_card.html -->
+<div class="card my-3" style="width: 18rem;">
+    <div class="card-header">
+        <p>username</p>
+    </div>
+    <img src="{{post.image.url}}" class="" alt="...">
+    <div class="card-body">
+      <!-- <h5 class="card-title">Card title</h5> -->
+      <p class="card-text">{{post.content}}</p>
+      <p class="card-text">{{post.created_at}}</p>
+      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    </div>
+</div>
+```
