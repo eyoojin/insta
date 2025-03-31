@@ -312,14 +312,14 @@ def create(request):
 <a href="">{{post.user.username}}</a>
 ```
 
-## 18. 시간 설정/ 이모지 설정
+## 18. 시간 설정/ icon 설정
 - 시간 설정
     - django가 가진 함수 사용
 ```html
 <!-- posts/templates/_card.html -->
 <p class="card-text">{{post.created_at|timesince}} ago</p>
 ```
-- 이모지 설정
+- icon 설정
     - `../templates/base.html`에 CDN 추가
 ```html
 <!-- _nav.html -->
@@ -328,6 +328,24 @@ def create(request):
     Insta⭐
 </a>
 ```
+
+## 19. Grid 시스템 적용
+```html
+<!-- posts/templates/index.html -->
+<div class="row">
+    {% for post in posts %}
+        {% include '_card.html' %}
+    {% endfor %}
+</div>
+```
+```html
+<!-- posts/templates/_card.html -->
+<div class="card my-3 p-0 col-12 col-md-6 col-xl-4">
+<div class="card my-3 p-0 col-12 offset-md-3 col-md-6">
+```
+- col-12: 전체를 12칸으로 나눔
+    - md 사이즈가 되면 6칸/6칸
+    - xl 사이즈가 되면 4칸/4칸/4칸
 
 ---
 ### commit message 수정
