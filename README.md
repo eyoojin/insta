@@ -15,14 +15,23 @@
 - templates 등록
 
 ## 3. Post modeling/ migration
-- ImageField
+- modeling
+    - ImageField
 ```python
 image = models.ImageField(upload_to='image')
 # 필수 옵션 'upload_to': 이미지가 저장되는 공간
 ```
 - makemigrations
-- error
+    - error
 ```shell
 pip install pillow
 ```
 - migrate
+
+## 4. admin에 Post 모델 등록
+```python
+# admin.py
+from .models import Post
+
+admin.site.register(Post)
+```
