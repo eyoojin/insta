@@ -403,6 +403,37 @@ def comment_create(request, post_id):
     {% endfor %}
 </div>
 ```
+
+# M:N
+- `User` -< `Like` >- `Post`
+- User:Like = 1:N
+- Post:LIke = 1:N
+
+## 23. modeling/migration
+```python
+# accounts/models.py
+class User(AbstractUser):
+    # post_set (FK)
+    # comment_set (FK)
+    # post_set (MMF) -> 충돌 => like_posts
+```
+```python
+# posts/models.py
+class Post(models.Model):
+    # 게시글 작성자(User와 Post 1:N 연결)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # user와 연결되면서 post_set 생성
+    
+    # 게시글에 좋아요 누른 사람(User와 Post M:N 연결)
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='like_posts', # 역참조에 사용하는 name 변경
+    )
+```
+
+
+
+
 ---
 ### commit message 수정
 ```shell

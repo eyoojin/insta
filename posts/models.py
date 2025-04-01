@@ -16,8 +16,14 @@ class Post(models.Model):
         upload_to='image/%Y/%m', # 년도와 월을 기준으로 폴더를 만듦
     )
 
-    # User와 Post 1:N 연결
+    # 게시글 작성자(User와 Post 1:N 연결)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    # 게시글에 좋아요 누른 사람(User와 Post M:N 연결)
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='like_posts', # 역참조에 사용하는 name 변경
+    )
 
 class Comment(models.Model):
     content = models.CharField(max_length=200)
