@@ -502,7 +502,17 @@ def profile(request, username):
 ```
 - 페이지 생성 `accounts/templates/profile.html`
     - 레이아웃 잡기: 페이지를 사각형으로 나눠보기
-
+- 모델
+```python
+# accounts/models.py
+# self: user와 user를 연결
+followings = models.ManyToManyField( # 내가 follow
+    'self',
+    related_name='followers',
+    symmetrical=False, # 대칭구조를 False로: 1 follow 2 != 2 follow 1
+    )
+# user_set => followers # 나를 follow
+```
 
 
 
