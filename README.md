@@ -347,6 +347,55 @@ def create(request):
     - md 사이즈가 되면 6칸/6칸
     - xl 사이즈가 되면 4칸/4칸/4칸
 
+# Comment
+## 20. Comment modeling/migration
+
+## 21. Comment Create
+- 경로 설정 `posts/urls.py`
+- Form `posts/forms.py`
+- 함수 생성 `posts/views.py`
+    - index 화면에서 출력
+- 페이지 생성 `posts/templates/_card.html`
+```html
+{% load django_bootstrap5 %}
+
+<div class="card-footer">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit">
+    </form>
+</div>
+```
+- 디자인
+```html
+<div class="row">
+    <div class="col-9">
+        {% bootstrap_form form show_label=False wrapper_class='' %}
+        <!-- wrapper_class='mb-3'이 기본이라 없애줌 -->
+    </div>
+    <div class="col-2">
+        <input type="submit" class="btn btn-primary">
+    </div>
+</div>
+```
+- form action
+- 함수 생성 `posts/views.py`
+```python
+@login_required
+def comment_create(request, post_id):
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post_id = post_id
+        comment.save()
+        return redirect('posts:index')
+```
+- 로그인 했을 때만 댓글작성창이 보이도록 수정
+
+
+
 ---
 ### commit message 수정
 ```shell
