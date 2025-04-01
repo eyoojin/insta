@@ -18,3 +18,8 @@ class Post(models.Model):
 
     # User와 Post 1:N 연결
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+class Comment(models.Model):
+    content = models.CharField(max_length=200)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
