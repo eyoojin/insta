@@ -394,8 +394,15 @@ def comment_create(request, post_id):
 ```
 - 로그인 했을 때만 댓글작성창이 보이도록 수정
 
-
-
+## 22. Comment Read
+- 페이지 수정 `posts/templates/_card.html`
+```html
+<div class="mt-2">
+    {% for comment in post.comment_set.all %}
+        <li>{{comment.user}} : {{comment.content}}</li>
+    {% endfor %}
+</div>
+```
 ---
 ### commit message 수정
 ```shell
