@@ -469,6 +469,7 @@ def like(request, post_id):
 ```
 - 좋아요 if
 ```html
+<!-- posts/templates/_card.html -->
 <a href="{% url 'posts:like' post.id %}" class="text-reset text-decoration-none">
     {% if user in post.like_users.all %}
     <i class="bi bi-heart-fill" style="color: red;"></i>
@@ -579,12 +580,12 @@ def follow(request, username):
 ```
 - 페이지 수정
 ```html
-<!-- profile.html -->
+<!-- accounts/templates/profile.html -->
 posts {{user_profile.post_set.all|length}}
 ```
 - 오류 수정
 ```html
-<!-- profile.html -->
+<!-- accounts/templates/profile.html -->
 {% if user != user_profile %}
 <div class="col-9">
     <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-primary">follow</a>
@@ -599,7 +600,7 @@ if me == you:
 
 ## 28. follow if
 ```html
-<!-- profile.html -->
+<!-- accounts/templates/profile.html -->
 <div class="col-9">
     {% if user in user_profile.followers.all %}
         <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-secondary">unfollow</a>
@@ -608,6 +609,29 @@ if me == you:
     {% endif%}
 </div>
 ```
+
+## 29. feed 기능 구현
+- 버튼 생성 `../templates/_nav.html`
+- 경로 설정 `posts/urls.py`
+- 함수 생성 `posts/views.py`
+```python
+def feed(request):
+    followings = request.user.followings.all()
+    # 현재 로그인한 사람의 팔로잉목록
+
+    posts = Post.objects.filter(user__in=followings) 
+    # 내가 팔로우하는 사람들이 작성한 게시물들
+
+    form = CommentForm()
+
+    context = {
+        'posts': posts,
+        'form': form,
+    }
+
+    return render(request, 'index.html', context)
+```
+
 
 ---
 ### commit message 수정
