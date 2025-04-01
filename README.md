@@ -484,6 +484,24 @@ fields = ('content', 'image', )
 exclude = ('user', 'like_users', )
 ```
 
+## 25. follow 기능 구현
+- 버튼 생성 `posts/templates/_card.html`
+- 경로 설정 `accounts/urls.py`
+- 함수 생성 `accounts/views.py`
+```python
+from .models import User
+
+def profile(request, username):
+    user_profile = User.objects.get(username=username)
+
+    context = {
+        'user_profile': user_profile,
+    }
+
+    return render(request, 'profile.html', context)
+```
+- 페이지 생성 `accounts/templates/profile.html`
+    - 레이아웃 잡기: 페이지를 사각형으로 나눠보기
 
 
 
