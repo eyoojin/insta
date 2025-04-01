@@ -409,7 +409,7 @@ def comment_create(request, post_id):
 - User:Like = 1:N
 - Post:LIke = 1:N
 
-## 23. 좋아요 기능 modeling/migration
+## 23. like 기능 modeling/migration
 ```python
 # posts/models.py
 class Post(models.Model):
@@ -430,7 +430,7 @@ class User(AbstractUser):
     # post_set (MMF) -> 충돌 => like_posts
 ```
 
-## 24. 좋아요 기능 구현
+## 24. like 기능 구현
 - 좋아요 버튼 달기
 ```html
 <!-- posts/templates/_card -->
@@ -484,7 +484,7 @@ fields = ('content', 'image', )
 exclude = ('user', 'like_users', )
 ```
 
-## 25. follow 기능 구현
+## 25. profile 기능 구현
 - 버튼 생성 `posts/templates/_card.html`
 - 경로 설정 `accounts/urls.py`
 - 함수 생성 `accounts/views.py`
@@ -502,6 +502,46 @@ def profile(request, username):
 ```
 - 페이지 생성 `accounts/templates/profile.html`
     - 레이아웃 잡기: 페이지를 사각형으로 나눠보기
+```html
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="row my-3">
+        <div class="col-3">
+            <img src="{{user_profile.profile_image.url}}" class="img-fluid rounded-circle" alt="">
+        </div>
+        <div class="col-9">
+            <div class="row">
+                <div class="col-3">{{user_profile.username}}</div>
+                <div class="col-9">
+                    <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-primary">follow</a>
+                </div>
+            </div>
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-4">
+                        posts
+                    </div>
+                    <div class="col-4">
+                        followers
+                    </div>
+                    <div class="col-4">
+                        following
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for post in user_profile.post_set.all %}
+            <div class="col-4 p-0">
+                <img src="{{post.image.url}}" class="img-fluid" alt="">    
+            </div>
+        {% endfor%}
+    </div>
+{% endblock %}
+```
+## 26. follow 기능을 위한 modeling/migration
 - 모델
 ```python
 # accounts/models.py
@@ -514,7 +554,48 @@ followings = models.ManyToManyField( # 내가 follow
 # user_set => followers # 나를 follow
 ```
 
+## 27. follow
+- 버튼 생성 `accounts/templates/profile.html`
+- 경로 설정 `accounts/urls.py`
+- 함수 생성 `accounts/views.py`
+```python
+def follow(request, username):
+    me = request.user
+    you = User.objects.get(username=username)
 
+    # 내가 너의 팔로우목록에 있을 때
+    if me in you.followers.all(): # 팔로우함
+        you.followers.remove(me)
+    else: # 팔로우 안함
+        you.followers.add(me)  
+
+    # 네가 나의 팔로우목록에 있을 때
+    if you in me.followings.all():
+        me.followings.remove(you)
+    else:
+        me.followings.add(you)
+
+    return redirect('accounts:profile', username)
+```
+- 페이지 수정
+```html
+<!-- profile.html -->
+posts {{user_profile.post_set.all|length}}
+```
+- 오류 수정
+```html
+<!-- profile.html -->
+{% if user != user_profile %}
+<div class="col-9">
+    <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-primary">follow</a>
+</div>
+{% endif %}
+```
+```python
+if me == you:
+    return redirect('accounts:profile', username)
+```
+- login_required
 
 ---
 ### commit message 수정
