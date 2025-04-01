@@ -5,7 +5,8 @@ class PostForm(ModelForm):
     class Meta():
         model = Post
         # fields = '__all__'
-        exclude = ('user', )
+        fields = ('content', 'image', )
+        # exclude = ('user', 'like_users', )
 
 class CommentForm(ModelForm):
     class Meta():

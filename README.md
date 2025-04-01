@@ -430,7 +430,7 @@ class User(AbstractUser):
     # post_set (MMF) -> 충돌 => like_posts
 ```
 
-## 24. 
+## 24. 좋아요 기능 구현
 - 좋아요 버튼 달기
 ```html
 <!-- posts/templates/_card -->
@@ -467,6 +467,23 @@ def like(request, post_id):
 
     return redirect('posts:index')
 ```
+- 좋아요 if
+```html
+<a href="{% url 'posts:like' post.id %}" class="text-reset text-decoration-none">
+    {% if user in post.like_users.all %}
+    <i class="bi bi-heart-fill" style="color: red;"></i>
+    {% else %}
+    <i class="bi bi-heart"></i>
+    {% endif %}
+</a>
+```
+- form에서 like_users 삭제
+```python
+# posts/forms.py
+fields = ('content', 'image', )
+exclude = ('user', 'like_users', )
+```
+
 
 
 
