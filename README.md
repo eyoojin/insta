@@ -409,14 +409,7 @@ def comment_create(request, post_id):
 - User:Like = 1:N
 - Post:LIke = 1:N
 
-## 23. modeling/migration
-```python
-# accounts/models.py
-class User(AbstractUser):
-    # post_set (FK)
-    # comment_set (FK)
-    # post_set (MMF) -> 충돌 => like_posts
-```
+## 23. 좋아요 기능 modeling/migration
 ```python
 # posts/models.py
 class Post(models.Model):
@@ -429,6 +422,50 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL,
         related_name='like_posts', # 역참조에 사용하는 name 변경
     )
+```
+```python
+# accounts/models.py
+class User(AbstractUser):
+    # post_set (FK)
+    # post_set (MMF) -> 충돌 => like_posts
+```
+
+## 24. 
+- 좋아요 버튼 달기
+```html
+<!-- posts/templates/_card -->
+<a href="{% url 'posts:like' post.id %}">
+      <i class="bi bi-heart"></i>
+</a>
+```
+- 경로 설정 `posts/urls.py`
+- 함수 생성
+```python
+# posts/views.py
+@login_required
+def like(request, post_id):
+    user = request.user
+    post = Post.objects.get(id=post_id)
+
+    # 게시물 관점
+    if post in user.like_posts.all():
+        user.like_posts.remove(post)
+    else:
+        user.like_posts.add(post)
+
+    # 유저 관점
+    if user in post.like_users.all():
+        post.like_users.remove(user)
+    else:
+        post.like_users.add(user)
+
+    # 좋아요 버튼을 눌렀을 때
+    # if 이미 좋아요한 상태라면
+    #   좋아요 삭제
+    # else 좋아요하지 않은 상태라면
+    #   좋아요 추가
+
+    return redirect('posts:index')
 ```
 
 
