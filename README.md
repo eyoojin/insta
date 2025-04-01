@@ -554,7 +554,7 @@ followings = models.ManyToManyField( # 내가 follow
 # user_set => followers # 나를 follow
 ```
 
-## 27. follow
+## 27. follow 기능 추가
 - 버튼 생성 `accounts/templates/profile.html`
 - 경로 설정 `accounts/urls.py`
 - 함수 생성 `accounts/views.py`
@@ -596,6 +596,18 @@ if me == you:
     return redirect('accounts:profile', username)
 ```
 - login_required
+
+## 28. follow if
+```html
+<!-- profile.html -->
+<div class="col-9">
+    {% if user in user_profile.followers.all %}
+        <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-secondary">unfollow</a>
+    {% else %}
+        <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-primary">follow</a>
+    {% endif%}
+</div>
+```
 
 ---
 ### commit message 수정
