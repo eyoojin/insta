@@ -632,7 +632,7 @@ def feed(request):
     return render(request, 'index.html', context)
 ```
 # JavaScript
-## 30. 
+## 30. like-async
 - 좋아요 버튼을 눌렀을 때 페이지가 새로고침되는 현상 수정
 - class에 like 추가, a 태그 삭제, data-post-id 추가
 ```html
