@@ -631,7 +631,111 @@ def feed(request):
 
     return render(request, 'index.html', context)
 ```
+# JavaScript
+## 30. 
+- 좋아요 버튼을 눌렀을 때 페이지가 새로고침되는 현상 수정
+- class에 like 추가, a 태그 삭제, data-post-id 추가
+```html
+<!-- posts/templates/_card.html -->
+<i class="bi like bi-heart-fill" style="color: red;" data-post-id="{{post.id}}"></i>
 
+<i class="bi like bi-heart" data-post-id="{{post.id}}"></i>
+```
+- js 적용
+```html
+<!-- posts/templates/index.html -->
+<script>
+    let likeBtns = document.querySelectorAll('i.like')
+    
+    let likeRequest = async (btn, postId) => {
+        let likeURL = `/posts/${postId}/like-async`
+        
+        let res = await fetch(likeURL)
+    }
+
+    likeBtns.forEach(function(likeBtn){
+        likeBtn.addEventListener('click', function(e){
+            const postId = e.target.dataset.postId
+            // data-post-id => dataset.postId
+
+            likeRequest(likeBtn, postId)
+        })
+    })
+</script>
+```
+- 받아줄 link 설정
+```python
+# posts/urls.py
+path('<int:id>/like-async', views.like_async, name='like_async')
+```
+- 함수 설정
+```python
+# posts/views.py
+from django.http import JsonResponse
+# dict -> json
+
+def like_async(request, id):
+    user = request.user
+    post = Post.objects.get(id=id)
+
+    if user in post.like_users.all():
+        post.like_users.remove(user)
+        status = False
+    else:
+        post.like_users.add(user)
+        status = True
+    
+    context = {
+        'post_id': id,
+        'status': status,
+    }
+
+    return JsonResponse(context)
+```
+```html
+<!-- posts/templates/index.html -->
+<script>
+    let likeRequest = async (btn, postId) => {
+        let likeURL = `/posts/${postId}/like-async`
+        
+        let res = await fetch(likeURL)
+        let result = await res.json()
+        // 위에서 만든 json을 받아옴
+
+        if (result.status) {
+            btn.style.color = 'red'
+            btn.classList.remove('bi-heart')
+            btn.classList.add('bi-heart-fill')
+        } else {
+            btn.style.color = 'black'
+            btn.classList.remove('bi-heart-fill')
+            btn.classList.add('bi-heart')
+        }
+    }
+<script>
+```
+- 좋아요 수 표시
+```python
+# views.py
+context = {'count': len(post.like_users.all())}
+```
+```html
+<!-- _card.html -->
+{% if user in post.like_users.all %}
+    <i class="bi like bi-heart-fill" style="color: red;" data-post-id="{{post.id}}">
+    <span style="color: black;">{{post.like_users.all|length}}</span>
+    </i>
+{% else %}
+    <i class="bi like bi-heart" data-post-id="{{post.id}}">
+    <span style="color: black;">{{post.like_users.all|length}}</span>
+    </i>
+{% endif %}
+<span> likes</span>
+```
+```js
+// index.html
+btn.querySelector('span').innerHTML = result.count
+```
 
 ---
 ### commit message 수정
