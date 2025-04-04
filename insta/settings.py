@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '.compute.amazonaws.com',
-    '*',
+    '*',
 ]
 
 
